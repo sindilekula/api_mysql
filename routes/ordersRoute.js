@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const con = require("../lib/db_connections");
 
-// GET ALL CATEGORIES
+// GET ALL ORDERS
 router.get("/", (req, res) => {
   try {
-    con.query("SELECT * FROM categories", (err, result) => {
+    con.query("SELECT * FROM orders", (err, result) => {
       if (err) throw err;
       res.send(result);
     });
@@ -15,10 +15,10 @@ router.get("/", (req, res) => {
   }
 });
 
-// GET A SINGLE CATEGORY BY ID
+// GET A SINGLE ORDER BY ID
 router.get("/:id", (req, res) => {
     try {
-      con.query(`SELECT * FROM categories where category_id = ${req.params.id}`, (err, result) => {
+      con.query(`SELECT * FROM orders where order_id = ${req.params.id}`, (err, result) => {
         if (err) throw err;
         res.send(result);
       });
@@ -28,11 +28,11 @@ router.get("/:id", (req, res) => {
     }
   });
 
-// ADDING A CATEGORY
+// ADDING AN ORDER
 router.post('/', (req, res) => {
-    const { name, description, thumbnail } = req.body
+    const { user_id, amount, shipping_address, order_email, order_date, order_status } = req.body
     try {
-        con.query(`INSERT INTO categories (name, description, thumbnail) values ('${name}', '${description}', '${thumbnail}')`, 
+        con.query(`INSERT INTO orders (amount, user_id, shipping_address, order_email, order_date, order_status) values ('${amount}','${user_id}', '${shipping_address}', '${order_email}', '${order_date}', '${order_status}')`, 
         (err, result) => {
             if (err) throw err;
             res.send(result);
@@ -42,10 +42,10 @@ router.post('/', (req, res) => {
     }
 });
 
-// DELETING A CATEGORY BY ID
+// DELETING A SINGLE ORDER BY ID
 router.delete("/:id", (req, res) => {
     try {
-      con.query(`SELECT * FROM categories where category_id = ${req.params.id}`, (err, result) => {
+      con.query(`SELECT * FROM orders where order_id = ${req.params.id}`, (err, result) => {
         if (err) throw err;
         res.send(result);
       });
@@ -55,11 +55,11 @@ router.delete("/:id", (req, res) => {
     }
   });
 
-  // UPDATE A CATEGORY BY ID
+// UPDATE A ORDER BY ID
 router.put('/:id', (req, res) => {
-    const { name, description, thumbnail } = req.body
+    const { amount, shipping_address, order_email, order_date, order_status } = req.body
     try {
-        con.query(`UPDATE categories set name='${name}', description='${description}', thumbnail='${thumbnail}' WHERE category_id=${req.params.id}`, 
+        con.query(`UPDATE orders set amount=${amount}, shipping_address='${shipping_address}', order_email='${order_email}', order_date='${order_date}', order_status='${order_status}' WHERE order_id=${req.params.id}`, 
         (err, result) => {
             if (err) throw err;
             res.send(result);

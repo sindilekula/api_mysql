@@ -9,6 +9,9 @@ app.use(cors()); // Dont let local development give errors
 // Import routes
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
+const categoryRoute = require("./routes/categoryRoute");
+const ordersRoute = require("./routes/ordersRoute");
+
 
 app.get("/", (req, res) => {
     res.json({ msg: "Welcome" });
@@ -16,6 +19,9 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoute);
 app.use("/products", productRoute);
+app.use("/categories", categoryRoute);
+app.use("/orders", ordersRoute);
+
 
 app.listen(app.get("port"), () => {
   console.log(`Listening for calls on port ${app.get("port")}`);
