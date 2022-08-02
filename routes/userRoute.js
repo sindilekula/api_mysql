@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const con = require("../lib/db_connections");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const middleware = require("../middleware/auth");
 
 // GET ALL USERS
 router.get("/", (req, res) => {
@@ -16,7 +19,7 @@ router.get("/", (req, res) => {
 });
 
 // GET A SINGLE USER BY ID
-router.get("/:id", (req, res) => {
+router.get("/:id",middleware, (req, res) => {
   try {
     con.query(
       `SELECT * FROM users where user_id = ${req.params.id}`,
@@ -98,7 +101,6 @@ router.put("/:id", (req, res) => {
 });
 
 // encryption
-const bcrypt = require("bcryptjs");
 
 // Register Route
 // The Route where Encryption starts
@@ -131,6 +133,7 @@ router.post("/register", (req, res) => {
       billing_address,
       default_shipping_address,
     };
+    // Connection to database
     con.query(sql, user, (err, result) => {
       if (err) throw err;
       console.log(result);
@@ -141,40 +144,9 @@ router.post("/register", (req, res) => {
   }
 });
 
-// Login
-// The Route where Decryption happens
-router.post("/login", (req, res) => {
-  try {
-    let sql = "SELECT * FROM users WHERE ?";
-    let user = {
-      email: req.body.email,
-    };
-    con.query(sql, user, async (err, result) => {
-      if (err) throw err;
-      if (result.length === 0) {
-        res.send("Email not found please register");
-      } else {
-        // Decryption
-        // Accepts the password stored in database and the password given by user (req.body)
-        const isMatch = await bcrypt.compare(
-          req.body.password,
-          result[0].password
-        );
-        console.log(req.body.password, result[0].password); // If password does not match
-        if (!isMatch) {
-          res.send("Password incorrect");
-        } else {
-          res.send(result);
-        }
-      }
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+
 
 // middleware
-const jwt = require('jsonwebtoken');
 
 // Login
 router.post("/login", (req, res) => {
@@ -228,9 +200,8 @@ router.post("/login", (req, res) => {
   }
 });
 
-
 // Verify
-router.get("/verify", (req, res) => {
+router.get("/users/verify", (req, res) => {
   const token = req.header("x-auth-token");
   jwt.verify(token, process.env.jwtSecret, (error, decodedToken) => {
     if (error) {
@@ -244,19 +215,16 @@ router.get("/verify", (req, res) => {
   });
 });
 
-
-const middleware = require("../middleware/auth");
-
-  router.get("/", middleware, (req, res) => {
-    try {
-      let sql = "SELECT * FROM users";
-      con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  });
+router.get("/", middleware, (req, res) => {
+  try {
+    let sql = "SELECT * FROM users";
+    con.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;

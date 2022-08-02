@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+        .table{
+            background-color: black;
+            color: white;
+            width: 100%;
+            text-align: center;
+        }
+        .table, th, td {
+           border: solid 1px white;
+           
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Users List
+
+    </h1>
+
+<a href="./login.html">Log In</a>
+    <div class="users">
+      <table class="table">
+        <tr>
+          <th>User Id</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Full Name</th>
+          <th>Billing Address</th>
+          <th>Shipping Address</th>
+          <th>Country</th>
+          <th>Phone</th>
+          <th>User Type</th>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Form -->
+    <!-- <div class="form">
+        <form action="" method="post"></form>
+    </div> -->
+    <script>
+      fetch("http://localhost:6969/users")
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((i) => {
+            document.querySelector(".table").innerHTML += `<tr>
+                <td>${i.user_id}</td>
+                <td>${i.email}</td>
+                <td>${i.password}</td>
+                <td>${i.full_name}</td>
+                <td>${i.billing_address}</td>
+                <td>${i.default_shipping_address}</td>
+                <td>${i.country}</td>
+                <td>${i.phone}</td>
+                <td>${i.user_type}</td>
+                </tr>`;
+          });
+        });
+    </script>
+  </body>
+</html>

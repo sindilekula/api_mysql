@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+  </head>
+  <body>
+    <section>
+      <div id="output">
+        <h1>LOG IN</h1>
+        <form id="form">
+          <label for="email">Email</label>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Enter your email address..."
+            required
+          />
+          <label for="password">Password</label>
+          <input
+            type="text"
+            name="password"
+            id="password"
+            placeholder="Enter your password..."
+            required
+          />
+          <button type="button" id="btn">Login</button>
+        </form>
+      </div>
+    </section>
+
+    <script>
+      const btn = document.querySelector("#btn");
+      btn.addEventListener("click", myFunction);
+
+      async function myFunction() {
+
+        const res = await fetch("http://localhost:6969/users/login", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ email: document.querySelector("#email").value, password: document.querySelector("#password").value }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+      }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #output {
+            background-color: #ff7200;
+            border: solid 3px black;
+            margin: 20px;
+            padding: 10px;
+            width: 500px;
+            height: 500px;
+            box-shadow: 5px 5px 5px #000122;
+            /* text-align: center; */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+            padding: 10px;
+            /* text-align: center; */
+        }
+
+        form input {
+            width: 80%;
+            padding: 10px;
+        }
+
+        form label {
+            color: white;
+            font-size: 20px;
+        }
+
+        button#btn {
+            margin-top: 10px;
+            width: 100px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+  </body>
+</html>
