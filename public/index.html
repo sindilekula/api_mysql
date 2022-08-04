@@ -41,28 +41,6 @@
       </table>
     </div>
 
-    <div class="Products">
-        <table class="table">
-          <tr>
-            <th>Product Id</th>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Weight</th>
-            <th>Descriptions</th>
-            <th>Thumbnail</th>
-            <th>Image</th>
-            <th>Category</th>
-            <th>Create_Date</th>
-            <th>Stock</th>
-          </tr>
-        </table>
-      </div>
-
-    <!-- Form -->
-    <!-- <div class="form">
-        <form action="" method="post"></form>
-    </div> -->
     <script>
       fetch("https://sindile.herokuapp.com/users")
         .then((res) => res.json())
@@ -82,25 +60,8 @@
           });
         });
 
-        fetch("https://sindile.herokuapp.com/products")
-        .then((res) => res.json())
-        .then((data) => {
-          data.forEach((i) => {
-            document.querySelector(".table").innerHTML += `<tr>
-                <td>${i.product_id}</td>
-                <td>${i.sku}</td>
-                <td>${i.name}</td>
-                <td>${i.price}</td>
-                <td>${i.weight}</td>
-                <td>${i.descriptions}</td>
-                <td>${i.thumbnail}</td>
-                <td>${i.image}</td>
-                <td>${i.category}</td>
-                <td>${i.create_date}</td>
-                <td>${i.stock}</td>
-                </tr>`;
-          });
-        });
     </script>
+
+    <a href="./products.html">Products</a>
   </body>
 </html>
